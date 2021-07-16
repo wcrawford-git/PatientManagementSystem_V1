@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.PaymentMethod>
+@{
+    ViewBag.Title = "";
+}
+
+<form id="paymentMethod">
+    <table  class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>LookUp</th>
+                <th>Description</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var paymentMethod in Model)
+            {
+                <tr>
+                    <td>Payment Method</td>
+                    <td>@paymentMethod.PaymentMethodDescription</td>
+                    <td><button class="btn btn-danger js-delete" data-payment-id=" @paymentMethod.PaymentMethodId ">Delete</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+    <script>
+        $(document).ready(function () {
+            console.log("You In Java Script");
+            $("#paymentMethod").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Patient?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: "/admin/DeletePaymentMethod/" + button.attr("data-patient-id"),
+                            method: "DELETE",
+                            dataType: 'html',
+                            success: function () {
+                            }
+                        });
+                    }
+                })
+            })
+        });
+    </script>
+
+

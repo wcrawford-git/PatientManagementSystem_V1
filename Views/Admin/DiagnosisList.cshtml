@@ -1,0 +1,27 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.Diagnosis>
+@{
+    ViewBag.Title = "";
+}
+
+<table id="diagnosis" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>LookUp</th>
+            <th>Description</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var diagnosis in Model)
+        {
+        <tr>
+            <td>Diagnosis</td>
+            <td>@diagnosis.DiagnosisDescription</td>
+            <td><a href="/admin/DeleteDiagnosis/" @diagnosis.DiagnosisId> Delete</a></td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+
+

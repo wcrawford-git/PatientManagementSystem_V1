@@ -1,0 +1,64 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.Patient>
+
+@{
+    ViewBag.Title = "Patients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Patients</h2>
+
+@*<div class="form-inline">
+        <label class="form-label" for="form1">Patient ID Number</label>
+        <div class="form-outline">
+            <input id="search-input" type="search" class="form-control" />
+            <button id="search-button" type="button" class="btn btn-primary">
+                Search
+            </button>
+            <br />
+        </div>
+    </div>
+
+    <script>
+        const searchButton = document.getElementById('search-button');
+        const searchInput = document.getElementById('search-input');
+        searchButton.addEventListener('click', () => {
+            const inputValue = searchInput.value;
+            alert(inputValue);
+        });
+    </script> *@
+
+<table id="patients" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>ID Number</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+           var table = $("#patients").DataTable({ //Populate Datatable with Data from patient API
+                ajax: {
+                    url: "/api/patients",
+                    dataSrc: ""
+                },
+                columns: [ //Populate columns
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: "idNo" // Populate patient Id Number
+                    }
+                ]
+            });
+        });
+    </script>
+}
+

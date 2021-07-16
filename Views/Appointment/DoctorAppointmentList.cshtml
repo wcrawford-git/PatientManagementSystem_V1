@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNet.Identity
+@model PatientManagementSystem.ViewModel.AppointmentFromViewModel
+
+@{
+    ViewBag.Title = "AppointmentForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Appointments</h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<table id="appointment" class="data table table-striped no-margin">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+@Html.Hidden("UserEmail", User.Identity.GetUserName())
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $("#appointment").hide();
+
+            if ($('#UserEmail').val() != "") {
+                $("#appointment").show();
+                var table = $("#appointment").DataTable({
+                    // searching: false,
+                    ajax: {
+                        url: "/api/appointment?email=" + $('#UserEmail').val(),
+                        dataSrc: ""
+                    },
+                    columns: [ //Populate columns
+                        {
+                            data: null,
+                            render: function (data, type, result) {
+                                return result.patient.name + " " + result.patient.surname; // populate Name and surname
+                            }
+
+                        },
+                        {
+                            data: null,
+                            render: function (data, type, result) {
+                                return new Date(result.dateTime).toDateString();
+                            }
+                        },
+                        {
+                            data: "time"
+                        },
+                        {
+                            data: null,
+                            render: function (data, type, result) {
+                                return "<a href='/consultation/new/" + result.patient.patientId + "' class='btn btn-success btn-xs' role='button'>Consutation</a>";
+                            }
+                        }
+                    ]
+                });
+                table.destroy();
+            } else {
+                $("#appointment").hide();
+            }
+
+        });
+    </script>
+}
+
+

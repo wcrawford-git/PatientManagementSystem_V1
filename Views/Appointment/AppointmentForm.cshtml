@@ -1,0 +1,99 @@
+﻿@model PatientManagementSystem.ViewModel.AppointmentFromViewModel
+
+@{
+    ViewBag.Title = "AppointmentForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Appointment <b> (@Html.DisplayFor(m => m.Patient.Name) @Html.DisplayFor(m => m.Patient.Surname)) </b></h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+@*<td>
+
+        @{
+            Html.RenderAction("AppointmentList", "Appointment", Model.Patients.PatientId);
+        }
+    </td>*@
+
+@using (Html.BeginForm("Save", "Appointment"))
+{
+    <h4><b><u>Doctor's Appointments</u></b></h4>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(m => m.Appointment.DoctorId)
+        @Html.DropDownListFor(m => m.Appointment.DoctorId, new SelectList(Model.Doctor, "DoctorId", "Name"), "Please Select", new { @class = "form-control", id = "DoctorID" })
+        @Html.ValidationMessageFor(m => m.Appointment.DoctorId)
+    </div>
+    <br />
+    <h4 id="headingAppointments"><b>Appointments </b></h4>
+    <div id="divAppointments">
+    </div>
+
+    <hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+
+    <h4><b><u>Make Appointment </u></b></h4>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Appointment.DateTime)
+        @Html.TextBoxFor(m => m.Appointment.DateTime, new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.Appointment.DateTime)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Appointment.Time)
+        @Html.TextBoxFor(m => m.Appointment.Time, new { @class = "form-control", type = "time" })
+        @Html.ValidationMessageFor(m => m.Appointment.Time)
+    </div>
+
+    // @Html.HiddenFor(m => m.Consultation.ConsultationId)
+    @Html.HiddenFor(m => m.Patient.PatientId)
+    //Implement Forgery Token
+    @Html.AntiForgeryToken();
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+
+}
+
+@*
+    @{
+        Html.RenderAction("AppointmentList", "Appointment", new { id = "3", mvcController = "Appointment", mvcAction = "AppointmentList" });
+        //Html.Action("AppointmentList", "Appointment", "3");
+    }
+*@
+
+
+
+
+
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            // $("#ddlMake").change(function () { url.action('Appointment', 'AppointmentList') })
+            $('#divAppointments').hide();
+            $('#headingAppointments').hide();
+
+
+            $('#DoctorID').change(function () {
+                var URL = '/Appointment/AppointmentList/' + $('#DoctorID').val();
+
+                $.ajax({
+                    url: URL,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html',
+                    success: (function (result) {
+                        $('#divAppointments').show();
+                        $('#headingAppointments').show();
+                        $('#divAppointments').html(result);
+                    })
+
+                })
+            })
+        });
+    </script>
+}
+
+

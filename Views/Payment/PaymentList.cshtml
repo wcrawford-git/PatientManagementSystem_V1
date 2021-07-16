@@ -1,0 +1,27 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.Payment>
+
+@{
+    ViewBag.Title = "";
+}
+<table id="consultation" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Payment Method</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payment in Model)
+        {
+            <tr>
+                <td>@payment.Patient.Name @payment.Patient.Surname</td>
+                <td>@payment.PaymentMethod</td>
+                <td>@payment.PaymentAmount</td>
+                <td>@payment.Date.ToString("dd")-@payment.Date.ToString("MM")-@payment.Date.ToString("yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

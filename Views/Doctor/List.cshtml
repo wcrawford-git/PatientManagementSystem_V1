@@ -1,0 +1,71 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.Doctor>
+
+@{
+    ViewBag.Title = "Doctors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Doctors  @Html.ActionLink("New Doctor", "New", "Doctor", null, new { @class = "btn btn-primary pull-right" })</h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<br />
+
+<table id="doctors" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Doctor</th>
+            <th>Practice No</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#doctors").DataTable({ //Populate Datatable with Data from doctor API
+                ajax: {
+                    url: "/api/doctors",
+                    dataSrc: ""
+                },
+                columns: [ //Populate columns
+                    {
+                        data: "name", //Populate Doctor Name
+                        render: function (data, type, doctor) {
+                            return "<a href='/doctor/edit/" + doctor.doctorId + "'>" + doctor.name + " " + doctor.surname + "</a>"; // populate Name and surname
+                        }
+                    },
+                    {
+                        data: "practiceNo" // Populate doctor Practice No
+                    },
+                    {
+                        data: "doctorId",
+                        render: function (data) {
+                            return "<button class='btn btn-danger btn-xs js-delete' data-doctor-id=" + data + ">Delete</button>"; // Polulate Delete button
+                        }
+                    }
+                ]
+            });
+            //Handle Delete Button Click
+            $("#doctors").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Doctor?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: "/api/doctors/" + button.attr("data-doctor-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                })
+            })
+        });
+    </script>
+}
+

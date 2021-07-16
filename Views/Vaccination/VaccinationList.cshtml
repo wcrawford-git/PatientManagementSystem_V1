@@ -1,0 +1,31 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.Vaccination>
+
+@{
+    ViewBag.Title = "";
+}
+<table id="vaccination" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Patient Surname</th>
+            <th>Vaccination Type</th>
+            <th>Date</th>
+            <th>Site</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vaccination in Model)
+        {
+            <tr>
+                <td>@vaccination.Patient.Name</td>
+                <td>@vaccination.Patient.Surname</td>
+                <td>@vaccination.VaccinationType.VaccinationDescription</td>
+                <td>@vaccination.Date</td>
+                <td>@vaccination.Site</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,301 @@
+﻿@model PatientManagementSystem.ViewModel.AdminFormViewModel
+
+@{
+    ViewBag.Title = "AdminForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<form id="Lookup">
+    <h2>Administration <b> </b></h2>
+    <hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+    <h4><b><u>Add LookUp Value</u></b></h4>
+    <br />
+    @Html.DropDownList("LookUpValue", @ViewBag.Admin as List<SelectListItem>, "Select Lookup", new { @class = "form-control", id = "LookUpID" })
+    <br />
+
+    @Html.Label("Enter Decription")
+    <div>
+        <input type="text" class="form-control" id="Description" />
+    </div>
+    <br />
+    <div>
+        <button class="btn btn-primary js-save">Save</button>
+    </div>
+
+    @*  <hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+        <h4 id="headingAdmin"><b><u>List LookUp Values</u></b></h4>
+        <br />
+        <div id="divAdmin"></div>*@
+
+    <table id="Tlookup" class="data table table-striped no-margin">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</form>
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+        $(document).ready(function () {
+            // $("#ddlMake").change(function () { url.action('Appointment', 'AppointmentList') })
+          /*  $('#divAdmin').hide();
+            $('#headingAdmin').hide();
+
+            $('#LookUpID').change(function () {
+                var URL = '/Admin/AdminList/' + $('#LookUpID').val();
+                $.ajax({
+                    url: URL,
+                    contentType: 'application/html; charset=utf-8',
+                    type: 'GET',
+                    dataType: 'html',
+                    success: (function (result) {
+                        $('#divAdmin').show();
+                        $('#headingAdmin').show();
+                        $('#divAdmin').html(result);
+                    })
+
+                })
+            })*/
+
+            $("#Tlookup").hide();
+            $('#LookUpID').change(function () {
+                if ($('#LookUpID').val() != "") {
+                    $("#Tlookup").show();
+                    var apiurl;
+                    if ($('#LookUpID').val() == 1) {
+                        apiurl = "/api/paymentmethod";
+                        var table = $("#Tlookup").DataTable({
+                            // searching: false,
+                            ajax: {
+                                url: apiurl,
+                                dataSrc: ""
+                            },
+                            columns: [ //Populate columns
+                                {
+                                    data: "paymentMethodId",
+                                },
+                                {
+                                    data: "paymentMethodDescription"
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, result) {
+                                        return '<button class="btn btn-danger btn-xs delete-paymentmethod" data-target="/api/paymentmethod/' + result.paymentMethodId + '" type="button">Delete</button>';
+                                    }
+                                }
+                            ]
+                        });
+
+                    }
+                    if ($('#LookUpID').val() == 2) {
+                        apiurl = "/api/diagnosis";
+                        var table = $("#Tlookup").DataTable({
+                            // searching: false,
+                            ajax: {
+                                url: apiurl,
+                                dataSrc: ""
+                            },
+                            columns: [ //Populate columns
+                                {
+                                    data: "diagnosisId",
+                                },
+                                {
+                                    data: "diagnosisDescription"
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, result) {
+                                        return '<button class="btn btn-danger btn-xs delete-diagnosis" data-target="/api/diagnosis/' + result.diagnosisId + '" type="button">Delete</button>';
+                                    }
+                                }
+                            ]
+                        });
+
+                    }
+                    if ($('#LookUpID').val() == 3) {
+                        apiurl = "/api/consultationtype";
+                        var table = $("#Tlookup").DataTable({
+                            // searching: false,
+                            ajax: {
+                                url: apiurl,
+                                dataSrc: ""
+                            },
+                            columns: [ //Populate columns
+                                {
+                                    data: "consultationTypeId",
+                                },
+                                {
+                                    data: "consultationDescription"
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, result) {
+                                        return '<button class="btn btn-danger btn-xs delete-consultationtype" data-target="/api/consultationtype/' + result.consultationTypeId + '" type="button">Delete</button>';
+                                    }
+                                }
+                            ]
+                        });
+
+                    }
+                    if ($('#LookUpID').val() == 4) {
+                        apiurl = "/api/doctortype";
+                        var table = $("#Tlookup").DataTable({
+                            // searching: false,
+                            ajax: {
+                                url: apiurl,
+                                dataSrc: ""
+                            },
+                            columns: [ //Populate columns
+                                {
+                                    data: "doctorTypeId",
+                                },
+                                {
+                                    data: "doctorTypeDescription"
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, result) {
+                                        return '<button class="btn btn-danger btn-xs delete-doctortype" data-target="/api/doctortype/' + result.doctorTypeId + '" type="button">Delete</button>';
+                                    }
+                                }
+                            ]
+                        });
+
+                    }
+                    if ($('#LookUpID').val() == 5) {
+                        apiurl = "/api/vaccinationtype";
+                        var table = $("#Tlookup").DataTable({
+                            // searching: false,
+                            ajax: {
+                                url: apiurl,
+                                dataSrc: ""
+                            },
+                            columns: [ //Populate columns
+                                {
+                                    data: "vaccinationTypeId",
+                                },
+                                {
+                                    data: "vaccinationDescription"
+                                },
+                                {
+                                    data: null,
+                                    render: function (data, type, result) {
+                                        return '<button class="btn btn-danger btn-xs delete-vaccinationtype" data-target="/api/vaccinationtype/' + result.vaccinationTypeId + '" type="button">Delete</button>';
+                                    }
+                                }
+                            ]
+                        });
+
+                    }
+                    table.destroy();
+                } //outer if
+                else {
+                    $("#Tlookup").hide();
+                }
+            });
+            //Payment Method Delete
+            $("#Lookup").on("click", ".delete-paymentmethod", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Payment Method?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: button.attr("data-target"),
+                            method: "DELETE",
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+            });
+
+            //Diagnosis Delete
+            $("#Lookup").on("click", ".delete-diagnosis", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Diagnosis?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: button.attr("data-target"),
+                            method: "DELETE",
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+            });
+
+            //Consultation Type Delete
+            $("#Lookup").on("click", ".delete-consultationtype", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this consultationtype?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: button.attr("data-target"),
+                            method: "DELETE",
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+            });
+
+            //Doctor Type Delete
+            $("#Lookup").on("click", ".delete-doctortype", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Doctor Type?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: button.attr("data-target"),
+                            method: "DELETE",
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+            });
+
+            //Vaccination Type Delete
+            $("#Lookup").on("click", ".delete-vaccinationtype", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Vaccination Type?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: button.attr("data-target"),
+                            method: "DELETE",
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                })
+            });
+
+            //Save Lookup
+            $("#Lookup").on("click", ".js-save", function () {
+                var button = $(this);
+                $.ajax({
+                    url: "/Admin/Save?id=" + $('#LookUpID').val() + "&description=" + $('#Description').val(),
+                    method: "GET",
+                    dataType: 'html',
+                    success: function (result) {
+                    }
+                });
+            })
+        });
+</script>
+}
+

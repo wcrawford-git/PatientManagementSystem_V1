@@ -1,0 +1,30 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.Appointment>
+
+@{
+    ViewBag.Title = "";
+}
+
+<table id="appointment" class="data table table-striped no-margin">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+        <tr>
+            <td>@appointment.Patient.Name @appointment.Patient.Surname</td>
+            <td>@appointment.DateTime.ToString("d ")-@appointment.DateTime.ToString("MMM")-@appointment.DateTime.ToString("yyyy")</td>
+            <td>@appointment.Time</td>
+            @*<td><button class='btn btn-success btn-xs js-consultation' data-patient-id=" + @appointment.PatientId + ">Consultation</button></td>*@
+            <td id="patient">@appointment.PatientId</td>
+
+        </tr>
+        }
+
+    </tbody>
+</table>

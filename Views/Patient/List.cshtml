@@ -1,0 +1,73 @@
+﻿@model IEnumerable<PatientManagementSystem.Models.Patient>
+
+@{
+    ViewBag.Title = "Patients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Patients  @Html.ActionLink("New Patient", "New", "Patient", null, new { @class = "btn btn-primary pull-right" })</h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<br />
+
+<table id="patients" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>ID Number</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#patients").DataTable({ //Populate Datatable with Data from patient API
+                ajax: {
+                    url: "/api/patients",
+                    dataSrc: ""
+                },
+                columns: [ //Populate columns
+                    {
+                        data: "name",//Populate Patient Name
+                        render: function (data, type, patient) {
+                            return "<a href='/patient/edit/" + patient.patientId + "'>" + patient.name + " " + patient.surname + "</a>"; // populate Name and surname
+                        }
+                    },
+                    {
+                        data: "idNo" // Populate patient Id Number
+                    },
+                    {
+                        data: "patientId",
+                        render: function (data, type, patient) {
+                            return "<button class='btn btn-danger btn-xs js-delete' data-patient-id=" + data + ">Delete</button>" + " " + // Polulate Delete button
+                                "<a href='/consultation/new/" + patient.patientId + "' class='btn btn-success btn-xs' role='button'>Consutation</a>" + " " + //Polulate Vaccination button
+                                "<a href='/vaccination/new/" + patient.patientId + "' class='btn btn-success btn-xs' role='button'>Vaccination</a>" + " " +
+                                "<a href='/appointment/new/" + patient.patientId + "' class='btn btn-success btn-xs' role='button'>Appointment</a>" + " " +
+                                "<a href='/payment/new/" + patient.patientId + "' class='btn btn-success btn-xs' role='button'>Payments</a>";// Polulate Vaccination button
+                        }
+                    }
+                ]
+            });
+            //Handle Delete Button Click
+            $("#patients").on("click", ".js-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this Patient?", function (result) { //Style confirmation box
+                    if (result) {
+                        $.ajax({ // Call delete method from API
+                            url: "/api/patients/" + button.attr("data-patient-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        });
+                    }
+                })
+            })
+        });
+    </script>
+}

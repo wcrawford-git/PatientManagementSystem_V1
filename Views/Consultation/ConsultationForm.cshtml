@@ -1,0 +1,75 @@
+﻿@model PatientManagementSystem.ViewModel.ConsutationFormViewModel
+
+@{
+    ViewBag.Title = "ConsultationForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Consultation <b> (@Html.DisplayFor(m => m.Patients.Name) @Html.DisplayFor(m => m.Patients.Surname)) </b> </h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<h4><b><u>Consultation History</u></b></h4>
+<br />
+<td>
+
+    @{
+        Html.RenderAction("ConsultationList", "Consultation", Model.Patients.PatientId);
+    }
+</td>
+<td>
+    @using (Html.BeginForm("Save", "Consultation"))
+    {
+
+        <hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+        <h4><b><u>Add Consultation Info</u></b></h4>
+        <br />
+        <div class="form-group">
+            @Html.LabelFor(m => m.Consultation.DoctorId)
+            @Html.DropDownListFor(m => m.Consultation.DoctorId, new SelectList(Model.Doctor, "DoctorId", "Name"), "Select Doctor", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Consultation.DoctorId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Consultation.DiagnosisId)
+            @Html.DropDownListFor(m => m.Consultation.DiagnosisId, new SelectList(Model.Diagnosis, "DiagnosisId", "DiagnosisDescription"), "Select Diagnosis", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Consultation.DiagnosisId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Consultation.ConsultationTypeId)
+            @Html.DropDownListFor(m => m.Consultation.ConsultationTypeId, new SelectList(Model.ConsultationType, "ConsultationTypeId", "ConsultationDescription"), "Select Consultation Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Consultation.ConsultationTypeId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Consultation.SymptomNotes)
+            @Html.TextAreaFor(m => m.Consultation.SymptomNotes, new { @class = "form-control", placeholder = "Symptom Notes", style = "height: 80px" })
+            @Html.ValidationMessageFor(m => m.Consultation.SymptomNotes)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Consultation.TreatmentNotes)
+            @Html.TextAreaFor(m => m.Consultation.TreatmentNotes, new { @class = "form-control", placeholder = "Treatment Notes", style = "height: 80px" })
+            @Html.ValidationMessageFor(m => m.Consultation.TreatmentNotes)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Consultation.Amount)
+            @Html.TextBoxFor(m => m.Consultation.Amount, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Consultation.Amount)
+        </div>
+
+
+        // @Html.HiddenFor(m => m.Consultation.ConsultationId)
+        @Html.HiddenFor(m => m.Patients.PatientId)
+        //Implement Forgery Token
+        @Html.AntiForgeryToken();
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    }
+</td>
+
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+

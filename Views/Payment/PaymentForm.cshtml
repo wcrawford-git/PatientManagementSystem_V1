@@ -1,0 +1,62 @@
+﻿@model PatientManagementSystem.ViewModel.PaymentFormViewModel
+
+@{
+    ViewBag.Title = "PaymentForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2><b>Payment </b>(@Html.DisplayFor(m => m.Patient.Name) @Html.DisplayFor(m => m.Patient.Surname))</h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+
+@using (Html.BeginForm("Save", "Payment"))
+{
+    <h4><b><u>Add Payment </u></b></h4>
+    <br />
+    <h4><b>Outstanding Balance: </b>R @Html.DisplayFor(m => m.Balance)</h4>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Payment.PaymentMethod)
+        @Html.TextBoxFor(m => m.Payment.PaymentMethod, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Payment.PaymentMethod)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Payment.Date)
+        @Html.TextBoxFor(m => m.Payment.Date, new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.Payment.Date)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Payment.PaymentAmount)
+        @Html.TextBoxFor(m => m.Payment.PaymentAmount, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Payment.PaymentAmount)
+    </div>
+
+
+    // @Html.HiddenFor(m => m.Consultation.ConsultationId)
+    @Html.HiddenFor(m => m.Patient.PatientId)
+    //Implement Forgery Token
+    @Html.AntiForgeryToken();
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<h4><b><u>Payment History </u></b></h4>
+<br />
+
+@{
+    Html.RenderAction("PaymentList", "Payment", Model.Patient.PatientId);
+}
+
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<h4><b><u>Invoice History </u></b></h4>
+<br />
+
+@{
+    Html.RenderAction("InvoiceList", "Payment", Model.Patient.PatientId);
+}
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

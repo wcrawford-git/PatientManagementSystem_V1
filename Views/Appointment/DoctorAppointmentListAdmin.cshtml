@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNet.Identity
+@model PatientManagementSystem.ViewModel.AppointmentFromViewModel
+
+@{
+    ViewBag.Title = "AppointmentForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<h2>Doctor Appointments</h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<div class="form-group">
+    @Html.LabelFor(m => m.Appointment.DoctorId)
+    @Html.DropDownListFor(m => m.Appointment.DoctorId, new SelectList(Model.Doctor, "DoctorId", "Email"), "Please Select", new { @class = "form-control", id = "DoctorID" })
+    @Html.ValidationMessageFor(m => m.Appointment.DoctorId)
+</div>
+
+<table id="appointment" class="data table table-striped no-margin">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $("#appointment").hide();
+
+            $('#DoctorID').change(function () {
+                if ($('#DoctorID').val() != "") {
+                    $("#appointment").show();
+                    var table = $("#appointment").DataTable({
+                        // searching: false,
+                        ajax: {
+                            url: "/api/appointment?id=" + $('#DoctorID').val(),
+                            dataSrc: ""
+                        },
+                        columns: [ //Populate columns
+                            {
+                                data: null,
+                                render: function (data, type, result) {
+                                    return result.patient.name + " " + result.patient.surname; // populate Name and surname
+                                }
+
+                            },
+                            {
+                                data: null,
+                                render: function (data, type, result) {
+                                    return new Date(result.dateTime).toDateString();
+                                }
+                            },
+                            {
+                                data: "time"
+                            },
+                            {
+                                data: null,
+                                render: function (data, type, result) {
+                                    return "<a href='/consultation/new/" + result.patient.patientId + "' class='btn btn-success btn-xs' role='button'>Consutation</a>";
+                                }
+                            }
+                        ]
+                    });
+                    table.destroy();
+                } else {
+                    $("#appointment").hide();
+                }
+            });
+
+        });
+    </script>
+}
+
+
+

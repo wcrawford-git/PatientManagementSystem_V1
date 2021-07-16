@@ -1,0 +1,46 @@
+﻿@*@model PatientManagementSystem.ViewModel.PatientViewModel
+
+    @{
+        ViewBag.Title = "Details";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h2>@Model.Diagnosis.DiagnosisDescription</h2>
+
+    @if (Model.Patients.Count == 0)
+    {
+        <text>No patients found</text>
+    }
+    else
+    {
+
+        <ul>
+            @foreach (var patient in Model.Patients)
+            {
+                <li>@patient.Name</li>
+
+            }
+
+        </ul>
+    }*@
+
+
+@model PatientManagementSystem.Models.Patient
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Patient information</h2>
+<table id="patient" class="table table-bordered">
+    <tr>
+        <td>@Model.Name</td>
+        <td>@Model.Surname</td>
+    </tr>
+</table>
+
+
+
+
+

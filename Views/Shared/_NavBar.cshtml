@@ -1,0 +1,124 @@
+﻿@*<div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <div class="logo-image">
+                        <img src=@Url.Content("~/Images/NavBar2.png") class="img-fluid">
+                        " >
+                    </div>
+                </a>
+                @Html.ActionLink("Patient Management System", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+
+
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Patients", "Index", "Patient")</li>
+                    <li>@Html.ActionLink("Doctors", "Index", "Doctor")</li>
+                    <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+                    <li>@Html.ActionLink("Appointments", "DoctorAppointmentList", "Appointment")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <style>
+        .logo-image {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-top: -10px;
+            margin-bottom: 6px;
+        }
+    </style>*@
+
+
+@using PatientManagementSystem.Models
+@using Microsoft.AspNet.Identity
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    @Html.ActionLink("Patient Management System", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (User.IsInRole(RoleName.Administrator))
+            {
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Patients", "Index", "Patient")</li>
+                        <li>@Html.ActionLink("Doctors", "Index", "Doctor")</li>
+                        <li>@Html.ActionLink("Appointments", "DoctorAppointmentListAdmin", "Appointment")</li>
+                        <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+                        <li>@Html.ActionLink("Register User", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+
+                </div>
+            }
+
+            if (User.IsInRole(RoleName.Doctor))
+            {
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Appointments", "DoctorAppointmentList", "Appointment")</li>
+                        <li>@Html.ActionLink("Patients", "Index", "Patient")</li>
+                    </ul>
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        </ul>
+                    }
+                </div>
+            }
+
+            if (User.IsInRole(RoleName.User))
+            {
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Patients", "Index", "Patient")</li>
+                    </ul>
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        </ul>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <ul class="nav navbar-nav navbar-right">
+                <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+            </ul>
+
+        }
+    </div>
+</div>
+
+

@@ -1,0 +1,55 @@
+﻿@model PatientManagementSystem.ViewModel.VaccinationFormViewModel
+
+@{
+    ViewBag.Title = "VaccinationForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Vaccination <b> (@Html.DisplayFor(m => m.Patients.Name) @Html.DisplayFor(m => m.Patients.Surname)) </b> </h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+<h4><b><u>Vaccination History</u></b></h4>
+<br />
+
+<td>
+    @{
+        Html.RenderAction("VaccinationList", "Vaccination", Model.Patients.PatientId);
+    }
+</td>
+<td>
+    @using (Html.BeginForm("Save", "Vaccination"))
+    {
+
+        <hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+        <h4><b><u>Add Vaccination Info</u></b></h4>
+        <br />
+        <div class="form-group">
+            @Html.LabelFor(m => m.Vaccinations.VaccinationTypeId)
+            @Html.DropDownListFor(m => m.Vaccinations.VaccinationTypeId, new SelectList(Model.VaccinationType, "VaccinationTypeId", "VaccinationDescription"), "Select Vaccination Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Vaccinations.VaccinationTypeId)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Vaccinations.Site)
+            @Html.TextBoxFor(m => m.Vaccinations.Site, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Vaccinations.Site)
+        </div>
+
+        // @Html.HiddenFor(m => m.Consultation.ConsultationId)
+        @Html.HiddenFor(m => m.Patients.PatientId)
+        //Implement Forgery Token
+        @Html.AntiForgeryToken();
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    }
+</td>
+
+
+@section scripts
+{
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+

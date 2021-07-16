@@ -1,0 +1,80 @@
+﻿@model PatientManagementSystem.ViewModel.PatientFormViewModel
+@{
+    ViewBag.Title = "PatientForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+<hr style="height:2px; width:100%; border-width:0; color:cadetblue; background-color:cadetblue">
+
+@using (Html.BeginForm("Save", "Patient"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.Name)
+        @Html.TextBoxFor(m => m.Patient.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.Surname)
+        @Html.TextBoxFor(m => m.Patient.Surname, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.Surname)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.IdNo)
+        @Html.TextBoxFor(m => m.Patient.IdNo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.IdNo)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.Address)
+        @Html.TextAreaFor(m => m.Patient.Address, new { @class = "form-control", placeholder = "please add address", style = "height: 80px" })
+        @Html.ValidationMessageFor(m => m.Patient.Address)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.Email)
+        @Html.TextBoxFor(m => m.Patient.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.Email)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.Phone)
+        @Html.TextBoxFor(m => m.Patient.Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.Phone)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.PaymentMethodId)
+        @Html.DropDownListFor(m => m.Patient.PaymentMethodId, new SelectList(Model.PaymentMethods, "PaymentMethodId", "PaymentMethodDescription"), "Select Payment Method", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.PaymentMethodId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.MedicalAidName)
+        @Html.TextBoxFor(m => m.Patient.MedicalAidName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.MedicalAidName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patient.MedicalAidNo)
+        @Html.TextBoxFor(m => m.Patient.MedicalAidNo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.MedicalAidNo)
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(m => m.Patient.MedicalAidPlan)
+        @Html.TextBoxFor(m => m.Patient.MedicalAidPlan, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Patient.MedicalAidPlan)
+    </div>
+
+
+
+    @Html.HiddenFor(m => m.Patient.PatientId)
+    //Implement Forgery Token
+    @Html.AntiForgeryToken();
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}
+
+@section scripts
+{   
+   
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
